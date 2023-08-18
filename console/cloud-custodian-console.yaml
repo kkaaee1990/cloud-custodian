@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-custodian-console
+  namespace: teste
+  labels:
+    app: cloud-custodian-console
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-custodian-console
+  template:
+    metadata:
+      labels:
+        app: cloud-custodian-console
+    spec:
+      containers:
+      - name: cloud-custodian-console
+        image: kkaaee1990/cloud-custodian-proxy:latest 
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: teste
+  name: cloud-custodian-console
+  labels:
+    app: cloud-custodian-console
+spec:
+  ports:
+  - port: 80
+    name: cloud-custodian-console
+  selector:
+    app: cloud-custodian-console
+
+
+
+

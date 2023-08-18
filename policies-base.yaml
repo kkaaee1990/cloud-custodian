@@ -1,0 +1,1440 @@
+    plicies:
+    ########################## ------- INICIO TAG COMPLINCE --------- ################################
+    #Recursos Verificados: ec2, rds, s3, vpc, ebs, es, sns, ecs, eks, Cloudtrail, ecs ,eks ,Glacier ,Kafka ,Lambda, sqs ,Ec2-Vpc, Brokers e DMS.
+    ###----EC2 TAG COMPLIANCE
+    - name: ec2-tag-compliance
+      resource: ec2
+      comment: |
+        Reporta os recursos que não estão conformidade com a política de tag. Recursos verificados: ec2, rds, s3, vpc, ebs, elasticsearch e brokers.
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos EC2 sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos EC2 que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----RDS TAG COMPLIANCE
+    - name: rds-tag-compliance
+      resource: rds
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos RDS sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos de RDS que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----S3 TAG COMPLIANCE 
+    - name: s3-tag-compliance
+      resource: s3
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos S3 sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos S3 que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----VPC TAG COMPLIANCE 
+    - name: vpc-tag-compliance
+      resource: vpc
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos VPC sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos VPC que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----EBS TAG COMPLIANCE 
+    - name: ebs-tag-compliance
+      resource: ebs
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos EBS sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos EBS eque atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1       
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ###----ES TAG COMPLIANCE 
+    - name: es-tag-compliance
+      resource: elasticsearch
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos ElasticSearch sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos ElasticSearch que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ###----MQ TAG COMPLIANCE 
+    - name: mq-tag-compliance
+      resource: message-broker
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos ActiveMQ sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos ActiveMQ que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+      
+    ###----SNS TAG COMPLIANCE 
+    - name: sns-tag-compliance
+      resource: sns
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos SNS sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos SNS que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+      
+    ###----CLOUDTRAIL TAG COMPLIANCE 
+    - name: cloudtrail-tag-compliance
+      resource: cloudtrail
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos Cloudtrail sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos Cloudtrail que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+      
+    ###----ECS TAG COMPLIANCE 
+    - name: ecs-tag-compliance
+      resource: ecs
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos ECS sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos ESC que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+      
+    ###----EKS TAG COMPLIANCE 
+    - name: eks-tag-compliance
+      resource: eks
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos EKS sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos EKS que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ###----GLACIER TAG COMPLIANCE 
+    - name: glacier-tag-compliance
+      resource: glacier
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos GLACIER sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos GLACIER que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ###----LAMBDA TAG COMPLIANCE 
+    - name: lambda-tag-compliance
+      resource: lambda
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos LAMBDA sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos LAMBDA que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ###----SQS TAG COMPLIANCE 
+    - name: sns-tag-compliance
+      resource: sqs
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos SQS sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos SQS que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----EC2 VPC TAG COMPLIANCE 
+    - name: ec2-vpc-tag-compliance
+      resource: aws.vpc
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos EC2-VPC sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos EC2-VPC que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+      
+    ###----DMS ENDPOINT TAG COMPLIANCE 
+    - name: dms-endpoint-tag-compliance
+      resource: dms-endpoint
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório de DMS-ENDPOINT sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Relatório de DMS-ENDPOINT sem tag:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----DMS TAG COMPLIANCE 
+    - name: dms-tag-compliance
+      resource: dms-instance
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:environment": absent
+            - "tag:vertical": absent
+            - "tag:startup": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório de DMS-ENDPOINT sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos EC2-VPC que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ########################## --------- FIM TAG COMPLINCE --------- ################################
+    ########################## --------- INICIO VERIFICAR EVENTOS AGENDADOS #########################
+    ###----EC2 COM EVENTOS AGENDADOS
+    - name: ec2-health-event
+      resource: ec2
+      filters:
+        - type: health-event
+          statuses: [upcoming]
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório de EC2 com eventos agendados[Conta: {{ account }} - {{ region }}]"
+          violation_desc: "<Relatório de EC2 com eventos agendados:"
+          to:
+            - email@email.com
+          transport:
+            type: sqs
+            queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+            region: us-east-1
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----RDS COM EVENTOS AGENDADOS
+    - name: RDS-health-event
+      resource: rds
+      filters:
+        - type: health-event
+          statuses: [upcoming]
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório de RDS com eventos agendados[Conta: {{ account }} - {{ region }}]"
+          violation_desc: "<Relatório de RDS com eventos agendados:"
+          to:
+            - email@email.com
+          transport:
+            type: sqs
+            queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+            region: us-east-1 
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----ELASTICH CACHE COM EVENTOS AGENDADOS
+    - name: elasticache-health-event
+      resource: cache-cluster
+      filters:
+        - type: health-event
+          statuses: [upcoming]
+      actions:        
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório de ELASTICH CACHE com eventos agendados[Conta: {{ account }} - {{ region }}]"
+          violation_desc: "<Relatório de ELASTICH CACHE com eventos agendados:"
+          to:
+            - email@email.com
+          transport:
+            type: sqs
+            queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+            region: us-east-1
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ########################## --------- FIM VERIFICAR EVENTOS AGENDADOS #########################
+    ########################## --------- INICIO DIVERSAS #########################
+    ###----S3 TAG NAME ####
+    - name: s3-tag-compliance-name
+      resource: s3
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+            - "tag:Name": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos S3 sem tag Name [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos S3 que atualmente não possuem a tag Name:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1 
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----S3-VERIFICA VERSIONING ATIVO
+    - name: s3-versioning-ativo
+      resource: s3
+      filters:
+          - type: value
+            key: Versioning.Status
+            value: Enable
+          - not:
+            - or:
+              - "tag:environment": "production"
+              - "tag:Versioning": "ativo"
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório de S3 com Versioning de Dev ou Test[Conta: {{ account }} - {{ region }}]"
+          violation_desc: "<Relatório de S3 com Versioning de Dev ou Test :"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1   
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----VERIFICA VOLUMES NÃO USADOS
+    - name: ebs-mark-unattached
+      resource: ebs
+      comments: |
+        Marca o volume EBS com uma tag indicando que o mesmo não está anexado.
+      filters:
+        - Attachments: []
+        - "tag:maid_status": absent
+      actions:
+        - type: tag
+          key: unattached
+          value: yes
+    - name: ebs-unmark-attached
+      resource: ebs
+      comments: |
+        Desmarca o EBS
+      filters:
+        - type: value
+          key: "Attachments[0].Device"
+          value: not-null
+        - "tag:maid_status": not-null
+        - "tag:unattached": present      
+      actions:
+        - type: untag
+          tags: ['unattached']
+    - name: ebs-marked-notify
+      resource: ebs
+      comments: |
+        Notifica os volumes EBS que não estão em uso por mais de 1.
+      filters:
+        - Attachments: []
+        - "tag:maid_status": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório de volumes não usados [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Relatório de volumes não usados:"
+          to:
+            - email@email.com        
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----VERIFICA VUNERABILIDADE NA PORTA 22
+    - name: global-ssh-port
+      resource: security-group
+      comment: |
+        Detecta e relata grupos de segurança com uma porta administrativa globalmente acessível para SSH (tcp / 22)
+      filters:
+        - type: ingress
+          IpProtocol: tcp
+          Ports: [22]
+          Cidr:
+            value: "0.0.0.0/0"
+        - not:
+          - or:
+            - GroupName: lambda
+            - GroupName: elasticsearch.test.xxxx.cloud
+            - GroupName: ElasticMapReduce-master
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório das portas 22 com acesso global  [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "<Relatório das portas 22 com acesso global :"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----RDS SEM CONEXÃO
+    - name: rds-no-connections
+      resource: rds
+      filters:
+        - type: metrics
+          name: DatabaseConnections
+          days: 3
+          value: 0
+          statistics: Maximum        
+          op: equal
+        - or:
+            - "tag:environment": "test"
+            - "tag:environment": "development"
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de RDS de Test e Dev sem conexão a mais de 3 dias sem conexão[Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Instâncias RDS de Test e Dev que estão ligados a mais de 3 dias e não tiveram conexões:"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----RELATORIO DE VOLUMES QUE NÃO SÃO GP3
+    - name: ebs-not-gp3
+      resource: ebs
+      filters:
+        - not:
+          - VolumeType: gp3
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório volumes que não são GP3  [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "<Relatório volumes que não são GP3 :"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ###----####----####----####----####----####----####----####----####----####----####----####----####
+    ###----ANALISE DE IAM FULL ACESS
+    - name: super-users
+      resource: iam-user
+      filters:
+            - type: check-permissions
+              match: allowed
+              actions:
+              - iam:CreateUser
+              - iam:FullAcess
+            - not:
+              - or:
+                - UserName: infraestrutura
+                - UserName: serverless
+                - UserName: kops
+                - UserName: ansible
+                - UserName: OpenShift-Ansible
+                - UserName: gitlab-ci
+                - UserName: oc-cert-teste
+                - UserName: terraform
+                - UserName: syncS3Objects
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de usuarios com permissão de IAM Full Acess  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de usuarios com permissão de IAM Full Acess :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----ANALISE DE ALLOW ALL PARA USERS
+      - name: iam-allow-all
+        resource: iam-policy
+        filters:
+          - type: has-allow-all
+          - not:
+            - or:
+              - PolicyName: Cloudcustodian
+              - PolicyName: AdministratorAccess
+        actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "<Relatório de usuarios com permissão de Allow-all  [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "<Relatório de usuarios com permissão de Allow-all Acess :"
+          to:
+            - email@email.com
+          transport:
+              type: sqs
+              queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+              region: us-east-1  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####---- CONTAS ROOT QUE NÃO POSSUEM MFA ATIVO
+      - name: root-keys-or-no-mfa
+        resource: account
+        filters:
+          - type: iam-summary
+            key: AccountMFAEnabled
+            value: false
+            op: eq
+            value_type: swap
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de contas ROOT que não possuem MFA ativo  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de contas ROOT que não possuem MFA ativo :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1 
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####---- IAM COM MAIS DE 360 DIAS E ATIVOS
+      - name: iam-user-access-keys-older-than-360days
+        resource: iam-user
+        filters:
+          - type: access-key
+            key: Status
+            value: Active
+          - type: access-key
+            match-operator: and
+            key: CreateDate
+            value: 360
+            value_type: age
+            op: gt
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatorio de chaves dos usuários IAM com idade acima de 360 dias [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatorio de chaves dos usuários IAM com idade acima de 360 dias.  :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1         
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####---- IAM NAO ATIVOS
+      - name: iam-user-nao-ativos
+        resource: iam-user
+        filters:
+          - type: access-key
+            key: Status
+            value: Inactive
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatorio de chaves dos usuários IAM Inativos [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatorio de chaves dos usuários IAM Inativos.  :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1          
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####---- IAM SEM ACESSO A MAIS DE 90 DIAS
+      - name: iam-user-sem-acessar-90-dias+
+        resource: iam-user
+        filters:
+          - type: credential
+            key: access_keys.active
+            value: true
+          - type: credential
+            key: access_keys.last_used_date
+            value: absent
+          - type: credential
+            key: access_keys.last_rotated
+            value_type: age
+            value: 90
+            op: gte       
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatorio de usuarios sem acessar a 90 dias + [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatorio de usuarios sem acessar a 90 dias +.  :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1   
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####---- IAM SEM TROCA DE SENHA A MAIS DE 360 DIAS
+      - name: iam-user--sem-trocar-a-senha-a-360-dias+
+        resource: iam-user
+        filters:
+          - type: credential
+            key: password_last_changed
+            value_type: age
+            value: 360
+            op: gte  
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatorio de chaves dos usuários com idade acima de 360 dias  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatorio de chaves dos usuários com idade acima de 360 dias.  :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----SECURITY GROUPS NÃO UTILIZADOS
+      - name: unused-security-groups
+        resource: security-group
+        filters:
+          - unused
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de Security-groups não usados [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Relatório de Security-groups não usados:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1 
+    ####----####----####----####----####----####----####----####----####----####----####----####----####            
+
+    ####----ELB NÃO UTILIZADOS
+      - name: elb-unused
+        resource: elb
+        filters:
+          - type: metrics
+            name: RequestCount
+            days: 1
+            value: 0
+            statistics: Sum
+            op: equal
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de ELB não utilizados [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "EBLs que não estão conectadas a uma instância:"
+            to:
+            - email@email.com
+            transport:
+              type: sns
+              region: us-east-2
+              topic: arn:aws:sns:us-east-2:068696838786:cloud-custodian-sns           
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----MQ BROKER SEM UTILIZAÇÃO 
+      - name: mq-no-connections
+        resource: message-broker
+        filters:
+          - type: metrics
+            name: CurrentConnectionsCount
+            days: 1
+            value: 0
+            statistics: Sum        
+            op: equal
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de Amazon MQ sem conexão a mais de 1 dia [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Instâncias MQ que não tiveram conexões a mais de 1 dia:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----RDS-SNAPSHOT - PRODUÇÃO - AWS-BACKUP
+      - name: rds-snapshot-expired
+        resource: rds-snapshot
+        filters:
+          - type: value
+            key: SnapshotType
+            value: awsbackup
+          - type: age
+            days: 90
+            op: gt
+          - or: 
+            - "tag:environment": "production"
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório dos RDS-Snapshots (aws-backup) de produção com mais de 90 dias [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "RDS - Snapshots (aws-backup) de produção criados a mais de 90 dias:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1   
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----RDS-SNAPSHOT-PRODUÇÃO-MANUAL
+      - name: rds-snapshot-expired
+        resource: rds-snapshot
+        filters:
+          - type: value
+            key: SnapshotType
+            value: manual
+          - type: age
+            days: 6
+            op: gt
+          - or:
+            - "tag:environment": "production"
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório dos RDS-Snapshots (manual) de produção com mais de 6 dias [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "RDS - Snapshots (manual) de produção criados a mais de 6 dias:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1   
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----RDS-SNAPSHOT-PRODUÇÃO-AUTOMATED
+      - name: rds-snapshot-expired
+        resource: rds-snapshot
+        filters:
+          - type: value
+            key: SnapshotType
+            value: automated
+          - type: age
+            days: 90
+            op: gt
+          - or:
+            - "tag:environment": "production"
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório dos RDS-Snapshots (automated) de produção com mais de 6 dias [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "RDS - Snapshots (automated) de produção criados a mais de 6 dias:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1 
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----RDS-SNAPSHOT-DESENVOLVIMENTO E TESTE
+      - name: rds-snapshot-expired
+        resource: rds-snapshot
+        filters:
+          - type: age
+            days: 6
+            op: gt
+          - or:
+            - "tag:environment": "test"
+            - "tag:environment": "development"
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório dos RDS-Snapshots de desenvolvimento ou teste criados a mais de 6 dias [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "RDS - Snapshots de desenvolvimento ou teste criados a mais de 6 dias:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1   
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----EBS-SNAPSHOT-COM MAIS DE 3 DIAS DE RETENÇÃO
+      - name: ebs-snapshot-um-dia-mais
+        resource: ebs-snapshot
+        filters:
+          - type: age
+            days: 3
+            op: gt
+          - or:
+                - "tag:TakeSnapshot": "true" 
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de EBS-SNAPSHOT com mais de 3 dias de rentenção [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de EBS-SNAPSHOT com mais de 3 dias de rentenção associados a tag TakeSnapshot:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----#ELASTICSEARCH NÃO UTILIZADOS
+      - name: elasticsearch-unused
+        resource: aws.elasticsearch
+        filters:
+          - type: metrics
+            name: RequestCount
+            days: 1
+            value: 0
+            statistics: Sum
+            op: equal
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de Elasticsearch não utilizados [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Elasticsearch que não estão com utilização:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1   
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----RDS TEST-DEV Ligados a mais de 3 dias sem conexão.
+      - name: rds-no-connections
+        resource: rds
+        filters:
+          - type: metrics
+            name: DatabaseConnections
+            days: 3
+            value: 0
+            statistics: Maximum        
+            op: equal
+          - or:
+              - "tag:environment": "test"
+              - "tag:environment": "development"
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de RDS de Test e Dev sem conexão a mais de 3 dias sem conexão[Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Instâncias RDS de Test e Dev que estão ligados a mais de 3 dias e não tiveram conexões:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----EC2 SEM USO DE CPU A MAIS DE 1 DIA  .
+      - name: ec2-no-cpu-usage
+        resource: ec2
+        filters:
+          - type: metrics
+            name: CPUUtilization
+            days: 1
+            value: 0
+            statistics: Sum        
+            op: equal
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de EC2 sem uso de CPU a mais de 1 dia [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Instâncias EC2 que não tiveram uso de CPU a mais de 1 dia:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----DMS INSTANCE
+      - name: dms-notify
+        resource: dms-instance
+        filters:
+          - or:
+              - "tag:Name": absent
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de DMS existentes [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de DMS existentes:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----LOG CLOUDWATCH  - DELETAR LOGS QUANDO A ULTIMA ESCRITA FIZER 29 DIAS
+      - name: cloudwatch-stale-groups
+        resource: log-group
+        filters:
+          - type: last-write
+            days: 29
+        actions:
+          - delete  
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----LOG CLOUDWATCH
+      - name: cloudwatch-stale-groups
+        resource: log-group
+        filters:
+          - type: last-write
+            days: 30
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de log que não tem escrita a mais de 30 dias  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de logs que não tem escrita a mais de 30 dias:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1        
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----LOG CLOUDWATCH - AVISA QUANDO TIVER RETENÇÃO DE NUNCA EXPIRAR
+      - name: cloudwatch-retention
+        resource: log-group
+        filters:
+            - type: value
+              key: Retention
+              op: in
+              value: Never expire
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de log que nunca expiram  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de log que nunca expiram :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----ELASTICACHE NÃO UTILIZADO A 1 DIA
+      - name: cache-cluster unused
+        resource: cache-cluster
+        filters:
+          - type: metrics
+            name: CPUUtilization
+            days: 1
+            value: 0
+            statistics: Sum
+            op: equal
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de ElastiCache não utilizados a 1 dia  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de ElastiCache não utilizados a 1 dia :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----EC2 DE DE DEV E TEST LIGADA A MAIS DE 24 HRS NAS VERTICAIS
+      - name: ec2-ligada-dev-test-vertical
+        resource: ec2
+        filters:
+          - type: state-age
+            op: ge
+            days: 2
+          - or:
+            - "tag:environment": "test"
+            - "tag:environment": "development"
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de EC2 ligados a mais de 1 dia sendo de dev ou test  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de EC2 ligadas a mais de 1 dia sendo de dev ou test :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----ELASTIC IP NÃO ATACHADO
+      - name: unused-eip-mark
+        resource: network-addr
+        filters:
+          - type: value
+            key: InstanceId
+            value: absent
+          - type: value
+            key: AssociationId
+            value: absent
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de EIP não usados  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de EIP não usados :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1       
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----S3 COM REPLICAÇÃO ATIVA
+      - name: s3-unapproved-account-replication
+        resource: s3
+        filters:
+            - type: value
+              key: Replication.ReplicationConfiguration.Rules[].Destination.Account
+              value: present
+            - not:
+              - or:
+                - "tag:environment": "production"
+                - "tag:Versioning": "ativo"
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de S3 com replicação ativa de Dev ou Test  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de S3 com replicação ativa de Dev ou Test :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----S3 COM STORAGE AUTOSCALING DESATIVADO
+      - name: rds-autoscaling-desativado
+        resource: rds
+        filters:
+          - or:
+            - type: value
+              key: StorageAutoscaling
+              value: Enable
+            - type: value
+              key: StorageAutoscaling
+              value: true
+            - type: value
+              key: StorageAutoscaling
+              value: enable
+            - type: value
+              key: StorageAutoscaling
+              value: present                        
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "<Relatório de S3 com Storage autoscaling desativado  [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "<Relatório de S3 com Storage autoscaling desativado  :"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1   
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----NOVAS EC2 CRIADAS
+      - name: cloudtraild-audit-new-resource-ec2
+        resource: aws.ec2
+        mode:
+          type: cloudtrail
+          role: Cloudcustodian2
+          tags:
+            environment: services
+            startup: infraestrutura
+            vertical: infraestrutura
+            Name: cloudtraild-audit-new-resource-ec2
+          events:
+              - RunInstances
+          filters:
+            - not:
+              - or:
+                - "tag:Name": "Spotinst"
+                - "tag:Name": "prod-bastion"
+                - "tag:Name": "test-bastion"
+                - "tag:service": "bastion"
+                - InstanceId: i-0858dd02316194eae
+                - InstanceId: i-00829af0bc8d9d7aa
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de novos EC2 criado [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Recursos EC2 que foram criados:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1 
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----NOVOS RDS CRIADOS
+      - name: cloudtraild-audit-new-resource-rds
+        resource: aws.rds
+        mode:
+          type: cloudtrail
+          role: Cloudcustodian2
+          tags:
+            environment: services
+            startup: infraestrutura
+            vertical: infraestrutura
+            Name: cloudtraild-audit-new-resource-rds
+          events:
+              - CreateDBInstance
+          actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de novos RDS criado [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Recursos RDS que foram criados:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1 
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----NOVOS S3 CRIADOS
+      - name: cloudtraild-audit-new-resource-S3
+        resource: aws.s3
+        mode:
+          type: cloudtrail
+          role: Cloudcustodian2
+          tags:
+            environment: services
+            startup: infraestrutura
+            vertical: infraestrutura
+            Name: cloudtraild-audit-new-resource-S3
+          events:
+              - CreateBucket              
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de novos S3 criado [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Recursos S3 que foram criados:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1 
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----NOVOS ELS CRIADOS
+      - name: cloudtraild-audit-new-resource-ELS
+        resource: aws.elasticsearch
+        mode:
+          type: cloudtrail
+          role: Cloudcustodian2
+          tags:
+            environment: services
+            startup: infraestrutura
+            vertical: infraestrutura
+            Name: cloudtraild-audit-new-resource-ELS
+          events:
+              - CreateElasticsearchDomain              
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de novos ELS criado [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Recursos ELS que foram criados:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1 
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----NOVOS ELS CRIADOS
+      - name: cloudtraild-audit-new-resource-ELS
+        resource: aws.cache-cluster
+        mode:
+          type: cloudtrail
+          role: Cloudcustodian2
+          tags:
+            environment: services
+            startup: infraestrutura
+            vertical: infraestrutura
+            Name: cloudtraild-audit-new-resource-ELS
+          events:
+              - CreateCacheCluster              
+        actions:
+          - type: notify
+            template: default.html
+            priority_header: 1
+            subject: "Relatório de novos ELS criado [Conta: {{ account }} - {{ region }}]"
+            violation_desc: "Recursos ELS que foram criados:"
+            to:
+              - email@email.com
+            transport:
+                type: sqs
+                queue: https://sqs.us-east-1.amazonaws.com/xxxxxxxxxxxxxx/cloud-custodian-mailer
+                region: us-east-1    
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+    ####----NOVOS S3 CRIADOS
+      - name: cloudtraild-audit-new-resource-S3
+        resource: aws.s3
+        mode:
+          type: cloudtrail
+          role: Cloudcustodian2
+          tags:
+            environment: services
+            startup: infraestrutura
+            vertical: infraestrutura
+            Name: cloudtraild-audit-new-resource-S3
+          events:
+              - CreateBucket 
+        actions:
+          - type: auto-tag-user
+            tag: Name
+            requestParameters: bucketName        
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+

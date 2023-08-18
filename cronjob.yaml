@@ -1,0 +1,229 @@
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: teste
+  name: cloud-custodian-aws-config
+  labels:
+    app: cloud-custodian-aws
+data:
+  python.py: |-
+    import datetime
+    import gzip
+    import shutil
+    import json
+    import re
+    import os
+
+    now = datetime.datetime.now()
+    ano = str(now.year)
+    mes = str(now.month)
+    dia = str(now.day)
+    hora = str(now.hour)
+    if hora == '0':
+        hora = '00'
+    def get_json(path):
+        # Descompacta o json
+        with gzip.open(path+'resources.json.gz', 'rb') as entrada:
+            with open(path+'resources.json', 'wb') as saida:
+                shutil.copyfileobj(entrada, saida)
+        # Carrega o json
+        with open(path+'resources.json') as file:
+            json_data = json.load(file)
+    
+        return json_data
+    resources_total = 0
+    resources_count = 0
+    resources       = ''
+    politica        = ''
+    tittle          = ''
+    body            = ''
+    #-----------------------------------------------------------------------------
+    politica = 's3-tag-compliance-name'
+    descricao = 'Recursos S3 sem tags "environment, vertical, startup"'
+    path = 'policies/'+politica+'/'+ano+'/'+mes+'/'+dia+'/'+hora+'/'
+    # Lista os dados
+    s3_json = get_json(path)
+    resources_total = len(get_json(path))
+    tittle = '<div"><span style="font-family:sans-serif; font-size:16px;f ont-weight:bold; color:#006400;">'+descricao+' - </span><span style="font-family:sans-serif; color: #A52A2A; font-weight: bold;">'+str(resources_total).zfill(4)+'</span></div>'
+    resources_count = 0
+    while resources_count < resources_total:
+        Name = '<div  style="width:350px; display:inline-block; font-size:12px;">'+str(s3_json[resources_count]['Name'])+'</div>'
+        resources += '<span style="color:#7CCD7C; font-weight:bold; font-size:12px;">'+str(resources_count).zfill(4)+'</span> - '+Name+'<br/>'
+        resources_count += 1
+    body += tittle+'<div id="div1" style="font-family:sans-serif;color:#999999;">'+resources+'<br/></div>'
+    #-----------------------------------------------------------------------------
+
+    codigo_html = '''
+    <html>
+    <head>
+    <title>Cloud Custodian</title>
+    </head>
+    <body style="background-color: #111111;" >'''+body
+    '''
+    </body>
+    </html>
+    '''
+    arq_html = open('index.html', 'w')
+    arq_html.write(codigo_html)
+    arq_html.close()
+
+    # envia html para o pod do cloud-custodian-console
+    out = os.popen("kubectl get pods -n teste").read()
+    x = re.search(r"\bclou\w+\b-\bcus\w+\-\bcon\w+\-\w+\-\w+", out)
+    pod = str(x.group())
+    cmd = 'kubectl cp index.html -n teste '+pod+':/usr/share/nginx/html/'
+    res = os.system(cmd)
+    if res == 0:
+        print(f'HTML enviado ao pod {pod} com sucesso!')
+
+  policies.yaml: |-
+    policies:
+    ####----S3 TAG NAME ####
+    - name: s3-tag-compliance-name
+      resource: s3
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+              - "tag:Environment": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos S3 sem tag Name [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos S3 que atualmente não possuem a tag Name:"
+          to:
+          - email@email.com
+          transport:
+            type: sns
+            region: us-east-2
+            topic: arn:aws:sns:us-east-2:xxxxxxxxxxxxxx:cloud-custodian-sns
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+    ####----EC2 TAG COMPLIANCE
+    - name: ec2-tag-compliance
+      resource: ec2
+      comment: |
+        Reporta os recursos que não estão conformidade com a política de tag. Recursos verificados: ec2, rds, s3, vpc, ebs, elasticsearch e brokers.
+      filters:
+        - or:
+              - "tag:Environment": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos EC2 sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos EC2 que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+          - email@email.com
+          transport:
+            type: sns
+            region: us-east-2
+            topic: arn:aws:sns:us-east-2:xxxxxxxxxxxxxx:cloud-custodian-sns
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cloud-custodian
+  namespace: teste
+spec:
+#Cron Time is set according to server time, ensure server time zone and set accordingly.
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  schedule: "59 04 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccount: cronjob-backup-service-account
+          containers:
+          - name: kubectl
+            image: kkaaee1990/cloud-custodian-aws:latest
+            command:
+            - /bin/sh
+            - -c
+            - >-
+              aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && aws configure set default.region $AWS_DEFAULT_REGION;
+              custodian run --output-dir ouput --region us-east-2 -s s3://cloud-custodian-bucket  policies.yaml;
+              custodian report --output-dir ouput --region us-east-2 -s s3://cloud-custodian-bucket policies.yaml;
+              aws s3 cp s3://cloud-custodian-bucket/ policies --recursive; 
+              echo '--------------------------------------------------------------------------------------------------------';
+              python3 python.py;
+            env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-custodian-credencials
+                  key: s3.client.default.access_key
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-custodian-credencials
+                  key: s3.client.default.secret_key
+            - name: AWS_DEFAULT_REGION
+              value: us-east-2
+            args:
+            - /bin/sh
+            - -c
+            - date; echo "Hello, World!"
+            imagePullPolicy: Always
+            volumeMounts:
+            - name: config
+              mountPath: /home/custodian/aws/policies.yaml
+              readOnly: true
+              subPath: policies.yaml
+            - name: python
+              mountPath: /home/custodian/aws/python.py
+              readOnly: true
+              subPath: python.py
+          restartPolicy: OnFailure
+          volumes:
+          - name: config
+            configMap:
+              name: cloud-custodian-aws-config
+          - name: python
+            configMap:
+              name: cloud-custodian-aws-config
+      backoffLimit: 3
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cronjob-backup-service-account
+  namespace: teste
+automountServiceAccountToken: true
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: get-pods
+  namespace: teste
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backup-cronjob-role-binding
+  namespace: teste
+subjects:
+- kind: ServiceAccount
+  name: cronjob-backup-service-account
+  namespace: teste
+roleRef:
+  kind: Role
+  name: get-pods
+  apiGroup: rbac.authorization.k8s.io
+---
+
+
+
+

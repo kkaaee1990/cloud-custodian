@@ -1,0 +1,43 @@
+    policies:
+    ####----S3 TAG NAME ####
+    - name: s3-tag-compliance-name
+      resource: s3
+      comment: |
+        Report on total count of non compliant instances
+      filters:
+        - or:
+              - "tag:Environment": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos S3 sem tag Name [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos S3 que atualmente não possuem a tag Name:"
+          to:
+          - email@email.com
+          transport:
+            type: sns
+            region: us-east-2
+            topic: arn:aws:sns:us-east-2:xxxxxxxxxxxxxx:cloud-custodian-sns
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
+    ####----EC2 TAG COMPLIANCE
+    - name: ec2-tag-compliance
+      resource: ec2
+      comment: |
+        Reporta os recursos que não estão conformidade com a política de tag. Recursos verificados: ec2, rds, s3, vpc, ebs, elasticsearch e brokers.
+      filters:
+        - or:
+              - "tag:Environment": absent
+      actions:
+        - type: notify
+          template: default.html
+          priority_header: 1
+          subject: "Relatório de Recursos EC2 sem tag [Conta: {{ account }} - {{ region }}]"
+          violation_desc: "Recursos EC2 que atualmente não possuem uma ou mais tags da política de compliance:"
+          to:
+          - email@email.com
+          transport:
+            type: sns
+            region: us-east-2
+            topic: arn:aws:sns:us-east-2:xxxxxxxxxxxxxx:cloud-custodian-sns
+    ####----####----####----####----####----####----####----####----####----####----####----####----####
